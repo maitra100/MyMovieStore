@@ -2,6 +2,7 @@ const mongoose=require('mongoose');
 const express = require("express");
 const app = express();
 const routes1=require("./routes/genres.js");
+const routes2=require("./routes/costumers.js");
 const routes3=require("./routes/movies.js");
 const Joi=require("joi");
 Joi.objectId=require("joi-objectid").length(Joi);
@@ -13,6 +14,7 @@ mongoose.connect("mongodb://localhost:27017/MoeTime",{ useNewUrlParser: true ,us
 
 app.use(express.json());
 app.use("/api/genres",routes1);
+app.use("/api/customers",routes2);
 app.use("/api/movies",routes3);
 
 
