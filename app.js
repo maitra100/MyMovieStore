@@ -6,6 +6,7 @@ const routes2=require("./routes/costumers.js");
 const routes3=require("./routes/movies.js");
 const routes4=require("./routes/rentals");
 const routes5=require("./routes/users");
+const routes6=require("./routes/auth");
 const Joi=require("joi");
 Joi.objectId=require("joi-objectid").length(Joi);
 
@@ -20,6 +21,7 @@ app.use("/api/customers",routes2);
 app.use("/api/movies",routes3);
 app.use("/api/rentals",routes4);
 app.use("/api/users",routes5);
+app.use("/api/auth",routes6);
 
 
 app.listen(3000, () => {
