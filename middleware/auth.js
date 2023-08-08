@@ -6,7 +6,7 @@ function auth(req,res,next){
   if(!token) return res.status(401).send("invalid token");
 
   try{
-      const decode=jwt.verify(token,"jwtprivatekey");
+      const decode=jwt.verify(token,"secret_key");
       req.user=decode;
       next();
   }

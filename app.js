@@ -2,18 +2,18 @@ const mongoose=require('mongoose');
 const express = require("express");
 const app = express();
 const routes1=require("./routes/genres.js");
-const routes2=require("./routes/costumers.js");
+const routes2=require("./routes/customers.js");
 const routes3=require("./routes/movies.js");
 const routes4=require("./routes/rentals");
 const routes5=require("./routes/users");
 const routes6=require("./routes/auth");
 const Joi=require("joi");
-Joi.objectId=require("joi-objectid").length(Joi);
+// Joi.objectId=require("joi-objectid").length(Joi);
 
 
-mongoose.connect("mongodb://localhost:27017/MoeTime",{ useNewUrlParser: true ,useUnifiedTopology: true})
+mongoose.connect("mongodb://127.0.0.1:27017/MovieTime",{ useNewUrlParser: true ,useUnifiedTopology: true})
 .then(()=> console.log("connected to mongodb"))
-.catch(err => console.error("couldn't to mongodb"));
+.catch(err => console.error("couldn't connect to mongodb"));
 
 app.use(express.json());
 app.use("/api/genres",routes1);

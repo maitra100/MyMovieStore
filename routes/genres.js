@@ -5,19 +5,21 @@ const route = express.Router();
 const Joi = require("joi");
 const auth = require("../middleware/auth");
 
-route.get("/", async (req, res) => {
+route.get("/",auth, async (req, res) => {
   const genre = await Genre.find().sort({ name: 1 });
   res.send(genre);
 });
 
-route.get("/:id", async (req, res) => {
+route.get("/:id",auth, async (req, res) => {
   const gen = await Genre.findbyId(req.params.id);
   if (!gen) return res.status(404).send("genre with the given id not found");
   res.send(gen);
 });
 
 route.post("/", auth, async (req, res) => {
-
+  if(req.user.email!=='soumil@gmail.com'){
+    res.send("not Authorized to perform this");
+  }
   let gen = new Genre({
     name: req.body.name,
   });
@@ -31,7 +33,10 @@ route.post("/", auth, async (req, res) => {
   res.send(gen);
 });
 
-route.put("/:id", async (req, res) => {
+route.put("/:id",auth, async (req, res) => {
+  if(req.user.email!=='soumil@gmail.com'){
+    res.send("not Authorized to perform this");
+  }
   const gen = await Genre.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true });
 
   if (!gen) return res.status(404).send("genre with the given id not found");
@@ -39,7 +44,10 @@ route.put("/:id", async (req, res) => {
   res.send(gen);
 });
 
-route.delete("/:id", async (req, res) => {
+route.delete("/:id", auth, async (req, res) => {
+  if(req.user.email!=='soumil@gmail.com'){
+    res.send("not Authorized to perform this");
+  }
   const gen = await Genre.findByIdAndRemove(req.params.id);
 
   if (!gen) return res.status(404).send("genre with the given id not found");

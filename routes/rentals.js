@@ -1,19 +1,23 @@
-const { Rental, validate } = require('../models/rental');
-const { Movies } = require('../models/movie');
-const { Customer } = require('../models/customer');
+const { Rental, validate } = require('../module/rental.js');
+const { Movies } = require('../module/movie');
+const { Customer } = require('../module/customer');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+const auth = require("../middleware/auth");
 
-router.get('/', async (req, res) => {
+router.get('/', auth,async (req, res) => {
   const rentals = await Rental.find().sort('-dateOut');
   res.send(rentals);
 });
 
-router.post('/', async (req, res) => {
+router.post('/',auth, async (req, res) => {
   /* const { error } = validate(req.body); 
    if (error) return res.status(400).send(error.details[0].message);*/
 
+   if(req.user.email!=='soumil@gmail.com'){
+    res.send("not Authorized to perform this");
+  }
   const customer = await Customer.findById(req.body.customerId);
   if (!customer) return res.status(400).send('Invalid customer.');
 
@@ -33,18 +37,18 @@ router.post('/', async (req, res) => {
       title: movie.title,
       dailyRentalRate: movie.dailyRentalRate
     },
-    dateOut: req.body.dateOut,
+    dateOut: new Date(),
     dateReturned: req.body.dateReturned,
     rentalFee: req.body.rentalFree
   });
   rental = await rental.save();
 
   movie.numberInStock--;
-  movie.save();
+  await movie.save();
   res.send(rental);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id',auth, async (req, res) => {
   const rental = await Rental.findById(req.params.id);
 
   if (!rental) return res.status(404).send('The rental with the given ID was not found.');

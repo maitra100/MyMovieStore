@@ -23,7 +23,7 @@ function validatecustomer(customers)
     const schema= Joi.object({
       isGold:Joi.required(),
       name:Joi.required(),
-      phone:Joi.required().min(10),
+      phone:Joi.number().min(10).required(),
     });
     return schema.validate(customers);
 }

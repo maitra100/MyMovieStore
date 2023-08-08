@@ -7,7 +7,7 @@ const jwt=require("jsonwebtoken");
 const auth=require("../middleware/auth");
 
 route.get("/me",auth,async(req,res)=>{
-  const user= await User.findById(req.user.id).select("-password");
+  const user= await User.find({name:req.user.name});
   res.send(user);
 });
 
@@ -22,7 +22,7 @@ route.post("/",async (req,res)=>{
      password:req.body.password,
    });
    await user.save();
-   const token=user.generateauthtoken();
+   const token=jwt.sign(req.body,'secret_key');
    res.header("x-auth-token",token).send(_.pick(user,["id","name","email"]));
 });
 module.exports=route;

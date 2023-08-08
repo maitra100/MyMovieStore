@@ -13,7 +13,7 @@ route.post("/",async (req,res)=>{
   const user=await User.findOne({email:req.body.email});
   if(!user) return res.status(400).send("invalid email");
   if(req.body.password===user.password){
-  const token=user.generateauthtoken();
+  const token=jwt.sign(req.body,'secret_key');
    return res.send(token);
    }
     return res.status(404).send("invalid password");
